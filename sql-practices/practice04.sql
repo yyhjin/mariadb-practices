@@ -92,33 +92,17 @@ limit 1;
 -- 문제8. (순수 join 문제)
 -- 현재 자신의 매니저보다 높은 연봉을 받고 있는 직원은?
 -- 부서이름, 사원이름, 연봉, 매니저 이름, 매니저 연봉 순으로 출력합니다.
-select dm.dept_no, s.salary
-from dept_manager dm, salaries s
-where dm.emp_no = s.emp_no
-and dm.to_date = '9999-01-01'
-and s.to_date = '9999-01-01';
-
-
-select dm.dept_no, s.salary
-from dept_manager dm, salaries s
-where dm.emp_no = s.emp_no
-and dm.to_date = '9999-01-01'
-and s.to_date = '9999-01-01';
-
-
-select d.dept_name, a.first_name, b.salary, e.first_name, e.salary
-  from employees a, salaries b, dept_emp c, departments d,(select d.dept_no as dept_no, b.salary as salary, a.first_name as first_name
-															  from employees a, salaries b, dept_emp c, dept_manager d
-															  where a.emp_no = b.emp_no
-															  and a.emp_no = c.emp_no
-															  and a.emp_no = d.emp_no
-															  and b.to_date = '9999-01-01'
-															  and c.to_date = '9999-01-01'
-															  and d.to_date = '9999-01-01') e
- where a.emp_no = b.emp_no
- and a.emp_no = c.emp_no
- and d.dept_no = c.dept_no
- and c.dept_no = e.dept_no
- and b.to_date = '9999-01-01'
- and c.to_date = '9999-01-01'
- and b.salary > e.salary;
+select d.dept_name, e.first_name, s.salary, a.first_name, a.salary
+from departments d, dept_emp de, employees e, salaries s, (select dm.dept_no, s.salary, e.first_name
+														   from dept_manager dm, employees e, salaries s
+                                                           where dm.emp_no = e.emp_no
+                                                           and e.emp_no = s.emp_no
+                                                           and dm.to_date = '9999-01-01'
+                                                           and s.to_date = '9999-01-01') a
+where d.dept_no = de.dept_no
+and de.emp_no = e.emp_no
+and e.emp_no = s.emp_no
+and de.to_date = '9999-01-01'
+and s.to_date = '9999-01-01'
+and de.dept_no = a.dept_no
+and s.salary > a.salary;
