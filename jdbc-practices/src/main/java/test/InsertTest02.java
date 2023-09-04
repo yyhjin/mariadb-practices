@@ -2,25 +2,21 @@ package test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public class UpdateTest01 {
+public class InsertTest02 {
 
 	public static void main(String[] args) {
-		DeptVo vo = new DeptVo();
-		vo.setNo(6L);
-		vo.setName("기획팀");
-		
-		boolean result = updateDepartment(vo);
+		boolean result = insertDepartment("QA팀");
 		System.out.println(result?"성공":"실패");
 	}
 
-	private static boolean updateDepartment(DeptVo vo) {
+	private static boolean insertDepartment(String name) {
 		boolean result = false;
 		
 		Connection conn = null;
-		Statement stmt = null;
+		PreparedStatement pstmt = null;
 		
 		try {
 			// 1. JDBC Driver Class 로딩
@@ -30,18 +26,19 @@ public class UpdateTest01 {
 			String url = "jdbc:mariadb://192.168.0.175:3306/webdb?charset=utf8";
 			conn = DriverManager.getConnection(url, "webdb", "webdb123");
 			
-			// 3. Statement 객체 생성
-			stmt = conn.createStatement();
+			// 3. SQL 준비
+			String sql = "insert "
+						+ "into dept "
+						+ "values (null, ?)";
+			pstmt = conn.prepareStatement(sql);
 			
-			// 4. SQL 실행
-			String sql = "update dept"
-					+ " set name = '" + vo.getName() + "'"
-					+ " where no = " + vo.getNo();
+			// 4. 값 binding
+			pstmt.setString(1, name);
+						
+			// 5. SQL 실행
+			int count = pstmt.executeUpdate();  // 생성자에 sql을 넣으면 binding한 sql이 아니라, 바인딩 전의 데이터가 들어감
 			
-			// update된 컬럼 개수를 반환함
-			int count = stmt.executeUpdate(sql);
-			
-			// 5. 결과 처리
+			// 6. 결과 처리
 			result = count == 1;
 			
 		} catch (ClassNotFoundException e) {
@@ -52,8 +49,8 @@ public class UpdateTest01 {
 			try {
 				// 6. 자원정리
 				// 사용했던 자원의 반대 순서대로 close
-				if (stmt != null) {
-					stmt.close();
+				if (pstmt != null) {
+					pstmt.close();
 				}
 				if (conn != null) {
 					conn.close();
