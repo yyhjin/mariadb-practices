@@ -3,7 +3,7 @@ package hr.main;
 import java.util.List;
 import java.util.Scanner;
 
-import hr.dao.EmployeesDao;
+import hr.dao.dao.EmployeesDao;
 import hr.dao.vo.EmployeesVo;
 
 public class HRMain01 {
