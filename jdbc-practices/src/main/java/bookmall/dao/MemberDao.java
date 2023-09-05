@@ -13,31 +13,37 @@ import bookmall.vo.MemberVo;
 
 public class MemberDao {
 
+	private Connection getConnection() throws SQLException {
+		Connection conn = null;
+			
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			String url = "jdbc:mariadb://192.168.0.175:3307/bookmall?charset=utf8";
+			conn = DriverManager.getConnection(url, "bookmall", "bookmall");
+		} catch (ClassNotFoundException e) {
+			System.out.println("드라이버 로딩 실패 : " + e);
+		} 
+
+		return conn;
+	}
+	
 	public List<MemberVo> findAll() {
 		List<MemberVo> result = new ArrayList<>();
 		
 		Connection conn = null;
-		Statement stmt = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
 		try {
-			// 1. JDBC Driver Class 로딩
-			Class.forName("org.mariadb.jdbc.Driver");
-			
-			// 2. 연결하기
-			String url = "jdbc:mariadb://192.168.0.175:3307/bookmall?charset=utf8";
-			conn = DriverManager.getConnection(url, "bookmall", "bookmall");
+			conn = getConnection();
 
-			stmt = conn.createStatement();
-			//3. SQL 준비
 			String sql =
 					"select name, phone, email, password" +
 					" from member";
+			pstmt = conn.prepareStatement(sql);
 			
-			//5. SQL 실행
-			rs = stmt.executeQuery(sql);
+			rs = pstmt.executeQuery();
 			
-			// 5. 결과 처리
 			while(rs.next()) {
 				String name = rs.getString(1);
 				String phone = rs.getString(2);
@@ -53,19 +59,15 @@ public class MemberDao {
 				result.add(vo);
 			}
 			
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패: " + e);
 		} catch (SQLException e) {
 			System.out.println("MemberDao Select Error: " + e);
 		} finally {
 			try {
-				// 6. 자원정리
-				// 사용했던 자원의 반대 순서대로 close
 				if (rs != null) {
 					rs.close();
 				}
-				if (stmt != null) {
-					stmt.close();
+				if (pstmt != null) {
+					pstmt.close();
 				}
 				if (conn != null) {
 					conn.close();
@@ -85,39 +87,26 @@ public class MemberDao {
 		ResultSet rs = null;
 		
 		try {
-			// 1. JDBC Driver Class 로딩
-			Class.forName("org.mariadb.jdbc.Driver");
+			conn = getConnection();
 			
-			// 2. 연결하기
-			String url = "jdbc:mariadb://192.168.0.175:3307/bookmall?charset=utf8";
-			conn = DriverManager.getConnection(url, "bookmall", "bookmall");
-			
-			//3. SQL 준비
 			String sql =
 					"insert into member(name, phone, email, password)" +
 					" values(?, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 			
-			//4. binding
 			pstmt.setString(1, vo.getName());
 			pstmt.setString(2, vo.getPhone());
 			pstmt.setString(3, vo.getEmail());
 			pstmt.setString(4, vo.getPassword());
 				
-			//5. SQL 실행
 			int count = pstmt.executeUpdate();
 			
-			// 5. 결과 처리
 			result = count==1;
 			
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패: " + e);
 		} catch (SQLException e) {
 			System.out.println("MemberDao Insert Error: " + e);
 		} finally {
 			try {
-				// 6. 자원정리
-				// 사용했던 자원의 반대 순서대로 close
 				if (rs != null) {
 					rs.close();
 				}
