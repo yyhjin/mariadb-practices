@@ -26,6 +26,55 @@ public class BookDao {
 		return conn;
 	}
 	
+	public BookVo findByNo(int bookNo) {
+		BookVo result = new BookVo();
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();
+
+			String sql =
+					"select title, price"
+					+ " from book"
+					+ " where no = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, bookNo);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				String title = rs.getString(1);
+				int price = rs.getInt(2);
+
+				result.setTitle(title);
+				result.setPrice(price);
+			}
+				
+		} catch (SQLException e) {
+			System.out.println("BookDao SelectByNo Error: " + e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
 	public List<BookVo> findAll() {
 		List<BookVo> result = new ArrayList<>();
 		

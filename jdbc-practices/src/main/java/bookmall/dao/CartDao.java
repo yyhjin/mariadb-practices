@@ -37,23 +37,20 @@ public class CartDao {
 			conn = getConnection();
 			
 			String sql =
-					"select b.title, c.count, b.price"
-					+ " from cart c, book b"
-					+ " where c.book_no = b.no";
+					"select book_no, count"
+					+ " from cart";
 			
 			pstmt = conn.prepareStatement(sql);
 
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				String title = rs.getString(1);
+				int bookNo = rs.getInt(1);
 				int count = rs.getInt(2);
-				int price = rs.getInt(3);
 				
 				CartVo vo = new CartVo();
-				vo.setTitle(title);
+				vo.setBookNo(bookNo);
 				vo.setCount(count);
-				vo.setPrice(price*count);
 				
 				result.add(vo);
 			}

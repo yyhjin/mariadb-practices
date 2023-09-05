@@ -2,7 +2,9 @@ package bookmall.dao.test;
 
 import java.util.List;
 
+import bookmall.dao.BookDao;
 import bookmall.dao.CartDao;
+import bookmall.vo.BookVo;
 import bookmall.vo.CartVo;
 
 public class CartDaoTest {
@@ -29,6 +31,9 @@ public class CartDaoTest {
 	private static void findAllTest() {
 		List<CartVo> list = new CartDao().findAll();
 		for(CartVo vo : list) {
+			BookVo bookVo = new BookDao().findByNo(vo.getBookNo());
+			vo.setTitle(bookVo.getTitle());
+			vo.setPrice(bookVo.getPrice()*vo.getCount());
 			System.out.println(vo);
 		}
 	}
