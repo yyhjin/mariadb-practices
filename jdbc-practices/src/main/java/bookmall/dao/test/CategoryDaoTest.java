@@ -34,12 +34,7 @@ public class CategoryDaoTest {
 	}
 
 	private static void insertTest(CategoryVo vo) {
-//		MemberDao dao = new MemberDao()
-//				.insert(vo);
-//				.insert(bookVo);
-		
 		new CategoryDao().insert(vo);
-		
 	}
 
 }

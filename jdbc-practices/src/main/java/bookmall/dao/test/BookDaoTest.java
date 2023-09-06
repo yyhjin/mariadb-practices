@@ -39,12 +39,7 @@ public class BookDaoTest {
 	}
 
 	private static void insertTest(BookVo vo) {
-//		MemberDao dao = new MemberDao()
-//				.insert(vo);
-//				.insert(bookVo);
-		
 		new BookDao().insert(vo);
-		
 	}
 
 }

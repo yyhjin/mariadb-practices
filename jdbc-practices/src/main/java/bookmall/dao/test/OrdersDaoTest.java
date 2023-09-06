@@ -19,13 +19,12 @@ public class OrdersDaoTest {
 		 * 4. 2에서 생성한 orderVo에 total값 수정
 		 */
 		
-//		OrdersVo ordersVo = new OrdersVo();
-//		ordersVo.setmemberNo(1);
-//		ordersVo.setName("둘리");
-//		ordersVo.setEmail("dolly@naver.com");
-//		ordersVo.setAddress("수원시 장안구");
-//		int ordersNo = insertOrdersTest(ordersVo);
-		int ordersNo = 1;
+		OrdersVo ordersVo = new OrdersVo();
+		ordersVo.setmemberNo(1);
+		ordersVo.setName("둘리");
+		ordersVo.setEmail("dolly@naver.com");
+		ordersVo.setAddress("수원시 장안구");
+		int ordersNo = insertOrdersTest(ordersVo);
 		
 		OrdersBookVo ordersBookVo = new OrdersBookVo();
 		ordersBookVo.setOrdersNo(ordersNo);
@@ -42,6 +41,10 @@ public class OrdersDaoTest {
 		findAllOrdersTest();
 		findAllOrdersBookTest();
 
+	}
+
+	private static int insertOrdersTest(OrdersVo vo) {
+		return new OrdersDao().insertOrders(vo);
 	}
 
 	private static void findAllOrdersTest() {

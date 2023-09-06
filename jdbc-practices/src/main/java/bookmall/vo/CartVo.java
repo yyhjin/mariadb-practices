@@ -47,7 +47,7 @@ public class CartVo {
 
 	@Override
 	public String toString() {
-		return "CartVo [title=" + title + ", count=" + count + ", price=" + price + "]";
+		return "도서제목: " + title + ", 수량: " + count + ", 가격: " + price;
 	}
 	
 }

@@ -39,7 +39,7 @@ public class CartDaoTest {
 	}
 
 	private static void insertTest(CartVo vo) {
-		new CartDao().insert(vo);		
+		new CartDao().insert(vo);
 	}
 
 }

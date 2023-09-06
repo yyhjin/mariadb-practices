@@ -35,13 +35,8 @@ public class MemberDaoTest {
 		}
 	}
 
-	private static void insertTest(MemberVo vo) {
-//		MemberDao dao = new MemberDao()
-//				.insert(vo);
-//				.insert(bookVo);
-		
+	private static void insertTest(MemberVo vo) {	
 		new MemberDao().insert(vo);
-		
 	}
 
 }

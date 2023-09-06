@@ -297,8 +297,8 @@ public class OrdersDao {
 			
 			pstmt.setInt(1, vo.getmemberNo());
 			pstmt.setString(2, vo.getOrdersManageNo());
-			pstmt.setString(3, vo.getEmail());
-			pstmt.setString(4, vo.getName());
+			pstmt.setString(3, vo.getName());
+			pstmt.setString(4, vo.getEmail());
 			pstmt.setString(5, vo.getAddress());
 				
 			int count = pstmt.executeUpdate();
